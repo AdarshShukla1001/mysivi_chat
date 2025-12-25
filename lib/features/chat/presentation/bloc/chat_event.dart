@@ -1,13 +1,21 @@
 import 'package:equatable/equatable.dart';
+import '../../../users/domain/user_model.dart';
 
 abstract class ChatEvent extends Equatable {
   const ChatEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class LoadHistory extends ChatEvent {}
+class LoadChat extends ChatEvent {
+  final UserModel user;
+
+  const LoadChat(this.user);
+
+  @override
+  List<Object?> get props => [user];
+}
 
 class SendMessage extends ChatEvent {
   final String text;
@@ -15,7 +23,7 @@ class SendMessage extends ChatEvent {
   const SendMessage(this.text);
 
   @override
-  List<Object> get props => [text];
+  List<Object?> get props => [text];
 }
 
 class ReceiveMessage extends ChatEvent {}

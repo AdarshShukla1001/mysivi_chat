@@ -6,7 +6,7 @@ class OffersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(child: Text('Offers Screen Placeholder')),
+      body: Center(child: Text('Offers',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),)),
     );
   }
 }
