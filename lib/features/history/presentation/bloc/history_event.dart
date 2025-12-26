@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../chat/domain/chat_model.dart';
+import 'package:mysivi_chat/features/history/data/chat_history_entity.dart';
 
 abstract class HistoryEvent extends Equatable {
   const HistoryEvent();
@@ -11,7 +11,7 @@ abstract class HistoryEvent extends Equatable {
 class LoadHistory extends HistoryEvent {}
 
 class UpdateHistory extends HistoryEvent {
-  final ChatModel chat;
+  final ChatHistoryEntity chat;
 
   const UpdateHistory(this.chat);
 

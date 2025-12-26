@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'core/di/service_locator.dart' as di;
-import 'features/main/presentation/screens/main_screen.dart';
+import 'package:mysivi_chat/core/di/injection_container.dart';
+ import 'features/main/presentation/screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await di.init();
+  await setupInjection();
   runApp(const MyApp());
 }
 

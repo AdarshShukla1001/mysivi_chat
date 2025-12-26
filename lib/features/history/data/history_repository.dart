@@ -1,15 +1,13 @@
+import 'package:mysivi_chat/core/resources/data_state.dart';
+import 'package:mysivi_chat/services/history_db_service/history_db_service.dart';
 import '../domain/chat_history_model.dart';
 
 class HistoryRepository {
-  final Map<String, ChatHistoryModel> _history = {};
+  final HistoryService _historyService;
 
-  Future<List<ChatHistoryModel>> getHistory() async {
-    final list = _history.values.toList();
-    list.sort((a, b) => b.lastMessageTime.compareTo(a.lastMessageTime));
-    return list;
-  }
+  HistoryRepository(this._historyService);
 
-  Future<void> updateHistory(ChatHistoryModel model) async {
-    _history[model.chatId] = model;
+  Future<DataState<List<ChatHistory>>> getHistory() async {
+    return await _historyService.getHistory();
   }
 }

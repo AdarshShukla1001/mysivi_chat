@@ -1,13 +1,12 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class UserModel extends Equatable {
+class UserModel {
   final String id;
   final String name;
+  final Color color;
 
-  const UserModel({required this.id, required this.name});
+  const UserModel({required this.id, required this.name, required this.color});
 
-  String get initial => name.isNotEmpty ? name[0].toUpperCase() : '?';
-
-  @override
-  List<Object?> get props => [id, name];
+  // Helper to get initials
+  String get initials => name.isNotEmpty ? name[0].toUpperCase() : '?';
 }

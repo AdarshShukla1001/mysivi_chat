@@ -4,9 +4,10 @@ import '../../users/domain/user_model.dart';
 import 'bloc/chat_bloc.dart';
 import 'bloc/chat_event.dart';
 import 'bloc/chat_state.dart';
+import '../../../../core/di/injection_container.dart';
+import 'widgets/chat_app_bar.dart';
 import 'widgets/message_bubble.dart';
-import '../../../../core/di/service_locator.dart';
-import '../../history/presentation/bloc/history_bloc.dart';
+import 'widgets/message_input.dart';
 
 class ChatPage extends StatelessWidget {
   final UserModel user;
@@ -16,74 +17,43 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          ChatBloc(chatRepository: sl(), historyBloc: sl())
-            ..add(LoadChat(user)),
+      create: (_) => sl<ChatBloc>()..add(LoadChat(user)),
       child: Scaffold(
-        appBar: AppBar(title: Text(user.name)),
-        body: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: BlocBuilder<ChatBloc, ChatState>(
-                  builder: (context, state) {
-                    if (state is ChatLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is ChatLoaded) {
-                      return ListView.builder(
-                        itemCount: state.chat.messages.length,
-                        itemBuilder: (context, index) {
-                          return MessageBubble(
-                            message: state.chat.messages[index],
-                          );
-                        },
-                      );
-                    } else if (state is ChatError) {
-                      return Center(child: Text(state.message));
-                    }
-                    return const SizedBox();
-                  },
-                ),
+        backgroundColor: Colors.grey.shade100,
+        appBar: ChatAppBar(user: user),
+        body: Column(
+          children: [
+            Expanded(
+              child: BlocBuilder<ChatBloc, ChatState>(
+                builder: (context, state) {
+                  if (state is ChatLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (state is ChatLoaded) {
+                    return ListView.builder(
+                      reverse: true,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 16,
+                      ),
+                      itemCount: state.chat.messages.length,
+                      itemBuilder: (context, index) {
+                        final message = state
+                            .chat
+                            .messages[state.chat.messages.length - 1 - index];
+                        return MessageBubble(message: message);
+                      },
+                    );
+                  }
+
+                  return const SizedBox.shrink();
+                },
               ),
-              _MessageInput(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _MessageInput extends StatefulWidget {
-  @override
-  State<_MessageInput> createState() => _MessageInputState();
-}
-
-class _MessageInputState extends State<_MessageInput> {
-  final _controller = TextEditingController();
-
-  void _send() {
-    if (_controller.text.isNotEmpty) {
-      context.read<ChatBloc>().add(SendMessage(_controller.text));
-      _controller.clear();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _controller,
-              decoration: const InputDecoration(hintText: 'Type a message...'),
-              onSubmitted: (_) => _send(),
             ),
-          ),
-          IconButton(icon: const Icon(Icons.send), onPressed: _send),
-        ],
+            const MessageInput(),
+          ],
+        ),
       ),
     );
   }

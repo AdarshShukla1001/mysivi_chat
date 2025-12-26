@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../features/placeholders/offers_screen.dart';
 import '../../../../features/placeholders/settings_screen.dart';
-import '../../../../home/home_page.dart';
+import '../../../home/home_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
